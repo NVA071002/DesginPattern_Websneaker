@@ -19,7 +19,10 @@
     <li><a href="index.jsp" class="active">Home</a></li>
     <li><a href="about.jsp">About</a></li>
         <c:if test = "${sessionScope.acc.perMiss==1}">
-        <li><a href="admincontrol">Admin</a></li>
+        <li><a href="admincontrol">Manage Product</a></li>
+        <li><a href="admin_user_control">Manage User</a></li>
+        <li><a href="admin_invoice_control">Manage Invoice</a></li>
+        <li><a href="revenue.jsp">Revenue</a></li>
         </c:if>
         <c:if test = "${sessionScope.acc.perMiss!=null}">
         <li><a href="userhistorycontrol?userid=${sessionScope.acc.userName}">Buy History </a></li>
@@ -27,7 +30,7 @@
     <li><a href="productload">Shop Now</a></li>
         <c:if test="${sessionScope.acc==null}">
         <li>  <a href="login.jsp">Login ${sessionScope.acc.perMiss}</a>  </li>          
-        </c:if>     
+        </c:if>
         <c:if test="${sessionScope.acc!=null}">
         <label>Hello:</label>                                                       
         <span>${sessionScope.acc.email}</span><br>

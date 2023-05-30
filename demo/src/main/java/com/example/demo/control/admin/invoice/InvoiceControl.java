@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.example.demo.control.admin;
+package com.example.demo.control.admin.invoice;
 
+import com.example.demo.entity.Invoice;
+import com.example.demo.entity.User;
 import com.example.demo.loaddata.LoadData;
 
 import javax.servlet.ServletException;
@@ -12,13 +14,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
  * @author Asus
  */
-@WebServlet(name = "AddControl", urlPatterns = {"/add"})
-public class AddControl extends HttpServlet {
+@WebServlet(name = "InvoiceControl", urlPatterns = {"/admin_invoice_control"})
+public class InvoiceControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,21 +35,16 @@ public class AddControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String nid = request.getParameter("id");
-        String nname = request.getParameter("name");
-        String nimage1 = request.getParameter("image1");
-        String nimage2 = request.getParameter("image2");
-        String nimage3 = request.getParameter("image3");
-
-        String nprice = request.getParameter("price");
-        String nsize = request.getParameter("size");
-        String ndescription = request.getParameter("description");
-        String ntype = request.getParameter("type");
-
         LoadData load = new LoadData();
-        load.insertProduct(nid, nname, nprice, ntype, nsize, nimage1,nimage2,nimage3, ndescription);
-        response.sendRedirect("admincontrol");
+
+        List<Invoice> listInvoice = load.getAllInvoice();
+        if(listInvoice.isEmpty()){
+            System.out.println("EMPTY");
+
+        }
+        request.setAttribute("listInvoice",listInvoice);
+
+        request.getRequestDispatcher("invoicemanage.jsp").forward(request, response);
 
     }
 

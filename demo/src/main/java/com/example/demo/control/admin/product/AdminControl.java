@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.example.demo.control.search;
+package com.example.demo.control.admin.product;
 
 import com.example.demo.entity.Product;
-import com.example.demo.entity.Review;
+import com.example.demo.entity.Type;
 import com.example.demo.loaddata.LoadData;
 
 import javax.servlet.ServletException;
@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author Asus
  */
-@WebServlet(name = "DetailControl", urlPatterns = {"/detail"})
-public class DetailControl extends HttpServlet {
+@WebServlet(name = "AdminControl", urlPatterns = {"/admincontrol"})
+public class AdminControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +35,36 @@ public class DetailControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String id = request.getParameter("pid");
         LoadData load = new LoadData();
-        Product p = load.getProductByID(id);
 
-        //REVIEW LOAD
+//        List<Product> list = load.getAllProduct();
 
-        List<Review> lstReview = load.loadReviewByProductID(id);
+        List<Type> listT = load.getAllType();
+        int count = load.getAmountProduct();
+        int endPage = count / 9;
+        if (count % 9 != 0) {
+            endPage++;
+        }
+//        System.out.println("Endpage at: " + endPage);
+//        System.out.println("count at: " + count);
+        String indexPage = request.getParameter("index");
+        if (indexPage == null) {
+            indexPage = "1";
+        }
+        int index = Integer.parseInt(indexPage);
 
+        List<Product> listProductIndex = load.getProductByPage(index);
 
-        request.setAttribute("detail", p);
-        request.setAttribute("lstReview", lstReview);
-        request.getRequestDispatcher("single.jsp").forward(request, response);
-      
+        request.setAttribute("activeIndex", index);
+
+        request.setAttribute("endP", endPage);
+        request.setAttribute("adminListP", listProductIndex);
+        
+//        request.setAttribute("adminListP", list);
+        request.setAttribute("adminListT", listT);
+
+        request.getRequestDispatcher("admin.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -2,10 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.example.demo.control.search;
+package com.example.demo.control.admin.invoice;
 
-import com.example.demo.entity.Product;
-import com.example.demo.entity.Review;
 import com.example.demo.loaddata.LoadData;
 
 import javax.servlet.ServletException;
@@ -14,14 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
  * @author Asus
  */
-@WebServlet(name = "DetailControl", urlPatterns = {"/detail"})
-public class DetailControl extends HttpServlet {
+@WebServlet(name = "InvoiceEditControl", urlPatterns = {"/invoice_edit"})
+public class InvoiceEditControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +32,19 @@ public class DetailControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String id = request.getParameter("pid");
+        request.setCharacterEncoding("UTF-8");
+
+        String nid_In = request.getParameter("id_In");
+        String ndate = request.getParameter("date");
+//        Double ntotalMoney = Double.valueOf(request.getParameter("totalMoney"));
+//        String nuID = request.getParameter("uID");
+        String nphone = request.getParameter("phone");
+        String naddress = request.getParameter("address");
+
+
         LoadData load = new LoadData();
-        Product p = load.getProductByID(id);
-
-        //REVIEW LOAD
-
-        List<Review> lstReview = load.loadReviewByProductID(id);
-
-
-        request.setAttribute("detail", p);
-        request.setAttribute("lstReview", lstReview);
-        request.getRequestDispatcher("single.jsp").forward(request, response);
-      
+        load.editInvoice(nid_In,ndate,nphone,naddress);
+        response.sendRedirect("admin_invoice_control");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

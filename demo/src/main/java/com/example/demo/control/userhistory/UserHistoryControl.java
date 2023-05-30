@@ -5,6 +5,7 @@
 package com.example.demo.control.userhistory;
 
 import com.example.demo.entity.Product;
+import com.example.demo.entity.User;
 import com.example.demo.loaddata.LoadData;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,19 +21,12 @@ import java.util.List;
  *
  * @author Asus
  */
-@WebServlet(name = "UserHistoryControl", urlPatterns = {"/userhistorycontrol"})
+@WebServlet(name = "UserHistoryControl", urlPatterns = {"/userhistorycontrol", "/addreview"})
 public class UserHistoryControl extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String useruserid = request.getParameter("userid");
@@ -39,43 +34,19 @@ public class UserHistoryControl extends HttpServlet {
         List<Product> list = load.getUSerBuy(useruserid);
         request.setAttribute("ListUH", list);
         request.getRequestDispatcher("buyhistory.jsp").forward(request, response);
-
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+        }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String review = request.getParameter("review");
+        String productId = request.getParameter("productId");
+        User user = new User();
+        HttpSession session = request.getSession();
+        user = (User) session.getAttribute("acc");
+        LoadData load = new LoadData();
+        load.saveReview(productId,user.getUserName(), review);
+        response.sendRedirect(request.getContextPath() + "/userhistorycontrol?userid="+user.getUserName());
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

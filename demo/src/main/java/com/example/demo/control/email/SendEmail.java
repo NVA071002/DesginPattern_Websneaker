@@ -19,8 +19,8 @@ import java.util.Random;
  */
 public class SendEmail {
 
-    final String fromEmail = "20110352@student.hcmute.edu.vn";
-    final String password = "vietanh0710";
+    final String fromEmail = "20110371@student.hcmute.edu.vn";
+    final String password = "nguyenvanhon1802";
 
     public String getRandom() {
 
@@ -285,6 +285,45 @@ public class SendEmail {
         }
 
         return test;
+    }
+
+    public boolean sendCodeforgot(String email, String code) {
+
+        String toEmail = email;
+        boolean test = false;
+
+        try {
+
+            Properties pr = new Properties();
+            pr.setProperty("mail.smtp.host", "smtp.gmail.com");
+            pr.setProperty("mail.smtp.port", "587");
+            pr.setProperty("mail.smtp.auth", "true");
+            pr.setProperty("mail.smtp.starttls.enable", "true");
+            pr.put("mail.smtp.ssl.trust", "*");
+            pr.put("mail.smtp.socketFactory.port", "587");
+            pr.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+            //get session to authenticate the host email address and password
+            Session session = Session.getInstance(pr, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(fromEmail, password);
+                }
+            });
+
+            Message mess = new MimeMessage(session);
+            mess.setFrom(new InternetAddress(fromEmail));
+            mess.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+            mess.setSubject("User Email Verification");
+            mess.setText("Code for reset password is " + code);
+            Transport.send(mess);
+
+            test = true;
+        } catch (Exception e) {
+
+        }
+        return test;
+
     }
 
 }

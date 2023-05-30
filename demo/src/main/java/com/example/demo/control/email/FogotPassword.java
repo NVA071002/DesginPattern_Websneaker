@@ -1,24 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-package com.example.demo.control.admin;
-
-import com.example.demo.loaddata.LoadData;
+package com.example.demo.control.email;
+import com.example.demo.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 
-/**
- *
- * @author Asus
- */
-@WebServlet(name = "DeleteControl", urlPatterns = {"/delete"})
-public class DeleteControl extends HttpServlet {
+@WebServlet(name = "VerifyCodeFogot", urlPatterns = {"/verifycodefogot"})
+public class FogotPassword extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,12 +25,19 @@ public class DeleteControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String delid = request.getParameter("delid");
-        LoadData load = new LoadData();
-        load.deleteProductByID(delid);
-        response.sendRedirect("admincontrol");
-        
-        
+        try ( PrintWriter out = response.getWriter()) {
+            HttpSession session = request.getSession();
+            String codesend = (String) session.getAttribute("authcode");
+            System.out.print(codesend);
+            String code = request.getParameter("authcode");
+            if (code.equals(codesend)) {
+                System.out.print("dd");
+                response.sendRedirect("newpassword.jsp");
+            } else {
+                request.getRequestDispatcher("verifyforgot.jsp").forward(request, response);
+            }
+
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -80,3 +80,4 @@ public class DeleteControl extends HttpServlet {
     }// </editor-fold>
 
 }
+

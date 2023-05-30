@@ -5,7 +5,6 @@
 package com.example.demo.loaddata;
 
 /**
- *
  * @author Asus
  */
 
@@ -30,13 +29,13 @@ public class LoadData {
 
     public Product getProduct(String a) {
         Product p = new Product();
-        String query = "select * from Product where ID_P='" + a + "'";
+        String query = "select * from Product where ID_P=?";
         System.out.println(query);
         try {
             conn = new DataBaseConnection().getConnection();
             ps = conn.prepareStatement(query);
+            ps.setString(1, a);
             rs = ps.executeQuery();
-            //ps.setString(1,a) gan string cho a
             while (rs.next()) {
                 p = new Product(rs.getString(1),
                         rs.getString(2),
@@ -47,6 +46,7 @@ public class LoadData {
                         rs.getString(7));
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -101,6 +101,7 @@ public class LoadData {
             list.clear();
             list.addAll(set);
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -130,6 +131,7 @@ public class LoadData {
                         rs.getString(7)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -159,6 +161,7 @@ public class LoadData {
                         rs.getString(7)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -189,6 +192,7 @@ public class LoadData {
                         rs.getString(9));
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -219,6 +223,7 @@ public class LoadData {
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -285,6 +290,7 @@ public class LoadData {
 //            }
 
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -306,6 +312,7 @@ public class LoadData {
             ps.executeUpdate();
 
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -317,7 +324,7 @@ public class LoadData {
 
     }
 
-    public void insertProduct(String id, String name, String price, String type, String size, String image1, String image2, String image3, String description) {
+    public boolean insertProduct(String id, String name, String price, String type, String size, String image1, String image2, String image3, String description) {
 
         String query = "INSERT INTO Product (ID_P, Name_P, Price, Type, Size, Image1,Image2,Image3, Description) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
 
@@ -336,18 +343,24 @@ public class LoadData {
             ps.executeUpdate();
 
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
 
         } finally {
             try {
                 conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
             }
         }
+        return true;
     }
 
     public void editProduct(String id, String name, String price, String type, String size, String image1, String image2, String image3, String description) {
 
+        int iprice = Integer.parseInt(price);
+        int izise = Integer.parseInt(size);
         String query = "UPDATE Product SET "
                 + "Name_P =?, "
                 + "Price =?, "
@@ -362,18 +375,19 @@ public class LoadData {
             conn = new DataBaseConnection().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, name);
-            ps.setString(2, price);
+            ps.setInt(2, iprice);
             ps.setString(3, type);
-            ps.setString(4, size);
-            ps.setString(6, image1);
-            ps.setString(7, image2);
-            ps.setString(8, image3);
-            ps.setString(6, description);
-            ps.setString(7, id);
+            ps.setInt(4, izise);
+            ps.setString(5, image1);
+            ps.setString(6, image2);
+            ps.setString(7, image3);
+            ps.setString(8, description);
+            ps.setString(9, id);
 
             ps.executeUpdate();
 
         } catch (Exception e) {
+            System.out.println(ps);
             System.out.println(e);
         } finally {
             try {
@@ -455,6 +469,7 @@ public class LoadData {
                 i = rs.getInt(1);
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -484,6 +499,7 @@ public class LoadData {
                         rs.getString(7)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         } finally {
             try {
@@ -494,4 +510,345 @@ public class LoadData {
         }
         return list;
     }
+
+    //ADMIN USER CONTROl
+    public List<User> getAllUser() {
+        List<User> list = new ArrayList<>();
+        String query = "select * from User";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new User(rs.getString("Email"),
+                        rs.getString("Name"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("perMiss")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    public User getUserByUserName(String username) {
+        String query = "SELECT * FROM User WHERE Username = ?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new User(rs.getString("Email"),
+                        rs.getString("Name"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("perMiss"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public void deleteUserByUsername(String userName) {
+
+        String query = "DELETE FROM USER WHERE Username =?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userName);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void editUser(String name, String email, String password, int Permission, String username) {
+
+        String query = "UPDATE user SET "
+                + "Name =?, "
+                + "Email =?, "
+                + "Password =?, "
+                + "perMiss =? "
+                + "WHERE user.Username = ?";
+
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            ps.setInt(4, Permission);
+            ps.setString(5, username);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(ps);
+            System.out.println(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // INVOICE CONTROL
+    public List<Invoice> getAllInvoice() {
+        List<Invoice> list = new ArrayList<>();
+        String query = "select * from invoice";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Invoice(rs.getInt("ID_In"),
+                        rs.getString("Date"),
+                        rs.getString("UID"),
+                        rs.getDouble("TotalMoney"),
+                        rs.getString("Phone"),
+                        rs.getString("Address")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    public void deleteInvoiceByID(String id) {
+
+        String query = "DELETE FROM Invoice WHERE Id_in =?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Invoice getInvoiceByID(String id) {
+        String query = "SELECT * FROM Invoice WHERE ID_In = ?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Invoice(rs.getInt("ID_In"),
+                        rs.getString("Date"),
+                        rs.getString("UID"),
+                        rs.getDouble("TotalMoney"),
+                        rs.getString("Phone"),
+                        rs.getString("Address")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public List<Detail_Invoice> getDetailInvoiceByID(String ID_In) {
+        List<Detail_Invoice> list = new ArrayList<>();
+        String query = "select * from detail_in WHERE ID_In = ?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, ID_In);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Detail_Invoice(rs.getInt("ID_In"),
+                        rs.getString("ID_P"),
+                        rs.getInt("Amount")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+    public List<Detail_Invoice> getDetailInvoiceByProductID(String prodID) {
+        List<Detail_Invoice> list = new ArrayList<>();
+        String query = "select * from detail_in WHERE ID_P = ?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, prodID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Detail_Invoice(rs.getInt("ID_In"),
+                        rs.getString("ID_P"),
+                        rs.getInt("Amount")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+    public void editInvoice(String id, String date, String phone, String address) {
+
+        String query = "UPDATE invoice SET "
+                + "Date =?, "
+                + "Phone =?, "
+                + "Address =? "
+                + "WHERE invoice.ID_In = ?";
+
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, date);
+            ps.setString(2, phone);
+            ps.setString(3, address);
+            ps.setString(4, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(ps);
+            System.out.println(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //REVIEW
+    public void saveReview(String productID, String username, String review) {
+        String query = "INSERT INTO review (username, productid, comment) VALUES (?,?,?);";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, productID);
+            ps.setString(3, review);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(ps);
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<Review> loadReviewByProductID(String productID)
+    {
+        List<Review> list = new ArrayList<>();
+        String query = "select * from review WHERE productid = ?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, productID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Review(rs.getString("productid"),
+                        rs.getString("comment"),
+                        rs.getString("username")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    //REVENUE
+    public List<Invoice> getInvoiceByDate(String date){
+        List<Invoice> list = new ArrayList<>();
+        String query = "select * from invoice WHERE Date = ?";
+        try {
+            conn = new DataBaseConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, date);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Invoice(rs.getInt("ID_In"),
+                        rs.getString("Date"),
+                        rs.getString("UID"),
+                        rs.getDouble("TotalMoney"),
+                        rs.getString("Phone"),
+                        rs.getString("Address")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
 }

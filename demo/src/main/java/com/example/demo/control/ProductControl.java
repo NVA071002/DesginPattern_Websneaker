@@ -82,6 +82,9 @@ public class ProductControl extends HttpServlet {
         } else {
             n = 0;
         }
+
+
+
         request.setAttribute("size", n);
         //for search
         request.setAttribute("ListT", listT);

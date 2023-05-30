@@ -46,14 +46,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         <!-- banner -->
 
         <jsp:include page = "navigator2.jsp"></jsp:include>
-
             <!-- //banner -->
             <!-- top Products -->
             <div class="ads-grid_shop">
                 <div class="shop_inner_inf">
                     <div class="privacy about">
                         <h3>Check<span>out</span></h3>
-
                         <div class="checkout-right">
                             <h4>Your shopping cart contains: <span>${size} Products</span></h4>
                         <table class="timetable_sub">
@@ -80,14 +78,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                                 <div class="quantity-select">
                                                     <button><a href="process?amount=-1&productId=${item.product.id}">-</a></button>${item.amount}
                                                     <button><a href="process?amount=1&productId=${item.product.id}">+</a></button>
-                                                    <!--                                                                                    <div class="entry value-minus">
-                                                                                                                                           
-                                                                                                                                        </div>
-                                                                                                                                            <div class="entry value"><span>${item.amount}</span></div>
-                                                                                                                                                                                                        <div class="entry value-plus active">&nbsp;</div>
-                                                                                                                                        <div class="entry value-plus active">
-                                                                                                                                            
-                                                                                                                                        </div>-->
                                                 </div>
                                             </div>
                                         </td>
@@ -101,11 +91,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                                 <input type="hidden" name="productId" value="${item.product.id}"/>
                                                 <input type="submit" value="Remove"/>
                                             </form>
-                                            <!--									<div class="rem">
-                                                                                                                        <div class="close1"/><img src="images/remove.png" width="30px" height="30px" alt="alt"/> </div>
-                                                                                                                    </div>-->
-
-                                        </td>
+                                         </td>
                                     </tr>
                                 </c:forEach>
 
@@ -115,19 +101,22 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="checkout-left">
 
                         <div class="col-md-4 checkout-left-basket">
-                            <h4>Continue to basket</h4>
+                            <a href ="trans.jsp">Continue to basket</a>
                             <ul>
                                 <c:forEach var="item" items="${o.items}">
 
                                     <li>${item.product.name} <i>-</i> <span>${item.product.price}</span></li>
                                 </c:forEach>
-                               
-                                
-                            </ul>
+                              </ul>
                             <h4>Total <i>-</i> <fmt:formatNumber type = "number" groupingUsed = "false" value="${o.totalMoney}"/>VND</h4>
-
+                            <div>
+                                <h4>
+                                    ${sessionScope['totalMoney'] = o.totalMoney}
+                                </h4>
+                            </div>
                         </div>
-                        <div class="col-md-8 address_form">
+
+                        <div  class="col-md-8 address_form" hidden>
                             <h4>Add a new Details</h4>
                             <form action="payment" method="post" class="creditly-card-form agileinfo_form">
                                 <section class="creditly-wrapper wrapper">
@@ -163,10 +152,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <!--                                <a href="payment">Make a Payment </a>-->
                             </div>
                         </div>
-
-                        <div class="clearfix"> </div>
-
-
                         <div class="clearfix"></div>
                     </div>
                 </div>

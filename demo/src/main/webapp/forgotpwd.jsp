@@ -14,7 +14,6 @@
 
         <!-- Main css -->
         <link rel="stylesheet" href="css/register.css">
-
         <script>
             function clearMessage() {
                 var message = document.getElementById("message");
@@ -32,35 +31,20 @@
                 <div class="container">
                     <div class="signup-content">
                         <div class="signup-form">
-                            <h2 class="form-title">Sign up</h2>
+                            <h2 class="form-title" style="font-size: 35px;">Forgot password</h2>
                             <form class="register-form" action="EmailVerify"method="post">
-                                <div class="form-group">
-                                    <label><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                    <input type="text" name="name"  placeholder="Your Name"/>
-                                </div>
                                 <div class="form-group">
                                     <label ><i class="zmdi zmdi-email"></i></label>
                                     <input type="email" name="email"  placeholder="Your Email"/>
                                 </div>
-                                <div class="form-group">
-                                    <label ><i class="zmdi zmdi-globe-alt"></i></label>
-                                    <input type="text" name="userName"  placeholder="UserName"/>
-                                </div>
-                                <div class="form-group">
-                                    <label ><i class="zmdi zmdi-lock"></i></label>
-                                    <input type="password" name="passWord"  placeholder="Password"/>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                                    <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
+                                <div class="form-group form-button">
+                                    <input type="submit" class="form-submit" value="Send code"/>
                                 </div>
                                 <div class="form-group form-button">
-                                    <input type="hidden" name="perMiss" value="0">
-                                    <input type="hidden" name="func" value="register">
-                                    <input type="submit"   class="form-submit" value="Register"/>
+                                    <input type="hidden" name="func" value="forgot">
                                 </div>
+                                <a id="message"><%= EmailVerifyControl.message%></a>
                             </form>
-                            <a id="message"><%= EmailVerifyControl.message%></a>
                         </div>
                         <div class="signup-image">
                             <figure><img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/sneakers-logo-design-template-3ed6589433370a39aa9478060e557bfd_screen.jpg?ts=1646104759" alt="sing up image"></figure>
@@ -70,5 +54,7 @@
                 </div>
             </section>
         </div>
+
+
     </body>
 </html>

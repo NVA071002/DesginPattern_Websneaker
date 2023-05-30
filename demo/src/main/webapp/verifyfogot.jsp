@@ -23,8 +23,8 @@
                 <div class="container">
                     <div class="signup-content">
                         <div class="signup-form">
-                            <h2 class="form-title">Verify your email</h2>
-                            <form class="register-form" action="verifycode"method="post">
+                            <h2 class="form-title">Verify your email for got</h2>
+                            <form class="register-form" action="verifycodefogot"method="post">
                                 <div class="form-group">
                                     <label ><i class="zmdi zmdi-lock"></i></label>
                                     <input type="password" name="authcode"  placeholder="Your code"/>

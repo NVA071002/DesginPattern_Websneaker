@@ -49,7 +49,7 @@
                             <div class="modal-body">					
                                 <div class="form-group">
                                     <label>ID</label>
-                                    <input value="${detail.id}" name="id" type="text" class="form-control"  readonly required>
+                                    <input value="${detail.id}" name="pid" type="text" class="form-control"  readonly required>
                                 </div>
                                 <div class="form-group">
                                     <label>Name</label>

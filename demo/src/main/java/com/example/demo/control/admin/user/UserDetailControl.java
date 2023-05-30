@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.example.demo.control.admin;
+package com.example.demo.control.admin.user;
 
 import com.example.demo.entity.Product;
 import com.example.demo.entity.Type;
+import com.example.demo.entity.User;
 import com.example.demo.loaddata.LoadData;
 
 import javax.servlet.ServletException;
@@ -20,8 +21,8 @@ import java.util.List;
  *
  * @author Asus
  */
-@WebServlet(name = "AdminControl", urlPatterns = {"/admincontrol"})
-public class AdminControl extends HttpServlet {
+@WebServlet(name = "UserDetailControl", urlPatterns = {"/userDetail"})
+public class UserDetailControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,37 +35,13 @@ public class AdminControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");        
+        String userName = request.getParameter("username");
         LoadData load = new LoadData();
-
-//        List<Product> list = load.getAllProduct();
-
-        List<Type> listT = load.getAllType();
-        int count = load.getAmountProduct();
-        int endPage = count / 9;
-        if (count % 9 != 0) {
-            endPage++;
-        }
-//        System.out.println("Endpage at: " + endPage);
-//        System.out.println("count at: " + count);
-        String indexPage = request.getParameter("index");
-        if (indexPage == null) {
-            indexPage = "1";
-        }
-        int index = Integer.parseInt(indexPage);
-
-        List<Product> listProductIndex = load.getProductByPage(index);
-
-        request.setAttribute("activeIndex", index);
-
-        request.setAttribute("endP", endPage);
-        request.setAttribute("adminListP", listProductIndex);
+        User user = load.getUserByUserName(userName);
+        request.setAttribute("userdetail", user);
+        request.getRequestDispatcher("UserEdit.jsp").forward(request, response);
         
-//        request.setAttribute("adminListP", list);
-        request.setAttribute("adminListT", listT);
-
-        request.getRequestDispatcher("admin.jsp").forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

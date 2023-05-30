@@ -1,3 +1,4 @@
+<%@ page import="com.example.demo.control.UserController" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -14,6 +15,14 @@
 
         <!-- Main css -->
         <link rel="stylesheet" href="css/register.css">
+
+        <script>
+            function clearMessage() {
+                var message = document.getElementById("message");
+                message.innerHTML = "";
+            }
+            setTimeout(clearMessage, 5000); // Xoá giá trị của biến sau 30 giây
+        </script>
     </head>
     <body>
         <div class="main">
@@ -23,16 +32,22 @@
                 <div class="container">
                     <div class="signup-content">
                         <div class="signup-form">
-                            <h2 class="form-title">Verify your email</h2>
-                            <form class="register-form" action="verifycode"method="post">
+                            <h2 class="form-title">Input new password </h2>
+                            <form class="register-form" action="usercontroller"method="post">
+                                ${sessionScope['actionCode'] = 'resetpassword'}
                                 <div class="form-group">
                                     <label ><i class="zmdi zmdi-lock"></i></label>
-                                    <input type="password" name="authcode"  placeholder="Your code"/>
+                                    <input type="password" name="passWord"  placeholder="Password"/>
+                                </div>
+                                <div class="form-group">
+                                    <label ><i class="zmdi zmdi-lock"></i></label>
+                                    <input type="password" name="repassWord"  placeholder="Password"/>
                                 </div>
                                 <div class="form-group form-button">
                                     <!--                                    <input type="hidden" name="perMiss" value="0">-->
                                     <input type="submit"   class="form-submit" value="Verify"/>
                                 </div>
+                                    <a id="message"><%= UserController.message%></a>
                             </form>
                         </div>
                         <div class="signup-image">

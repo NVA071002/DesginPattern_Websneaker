@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.example.demo.control.search;
+package com.example.demo.control.admin.user;
 
 import com.example.demo.entity.Product;
-import com.example.demo.entity.Review;
+import com.example.demo.entity.Type;
+import com.example.demo.entity.User;
 import com.example.demo.loaddata.LoadData;
 
 import javax.servlet.ServletException;
@@ -20,8 +21,8 @@ import java.util.List;
  *
  * @author Asus
  */
-@WebServlet(name = "DetailControl", urlPatterns = {"/detail"})
-public class DetailControl extends HttpServlet {
+@WebServlet(name = "UserControl", urlPatterns = {"/admin_user_control"})
+public class UserControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +36,17 @@ public class DetailControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String id = request.getParameter("pid");
         LoadData load = new LoadData();
-        Product p = load.getProductByID(id);
 
-        //REVIEW LOAD
+        List<User> listUser = load.getAllUser();
+        if(listUser.isEmpty()){
+            System.out.println("EMPTY");
 
-        List<Review> lstReview = load.loadReviewByProductID(id);
+        }
+        request.setAttribute("listUser",listUser);
 
+        request.getRequestDispatcher("usermanage.jsp").forward(request, response);
 
-        request.setAttribute("detail", p);
-        request.setAttribute("lstReview", lstReview);
-        request.getRequestDispatcher("single.jsp").forward(request, response);
-      
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

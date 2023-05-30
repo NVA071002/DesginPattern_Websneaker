@@ -43,31 +43,21 @@ public class LoginControl extends HttpServlet {
 //                } 
         if (action.equals("join")) {
             try {
-
-
-
                 Connection con =  new DataBaseConnection().getConnection();
                 PreparedStatement pst = con.prepareStatement("select * from User where Username = ? and Password = ?");
                 pst.setString(1, userName);
                 pst.setString(2, passWord);
-
                 ResultSet rs = pst.executeQuery();
-
-                
-
                 if (rs.next()) {
                     // get parameters from the request
                    String email = rs.getString("Email");
                     String name = rs.getString("Name");
-               
-                    int per=rs.getInt("perMiss");
+                                   int per=rs.getInt("perMiss");
                     // store data in User object
                     User user = new User(email, name, userName, passWord,per);
-
                     // validate the parameters
                     mess = "";
                     url = "/index.jsp";
-
                     request.setAttribute("user", user);
                     request.setAttribute("message", mess);
                     System.out.println(email);
